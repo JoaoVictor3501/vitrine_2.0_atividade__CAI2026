@@ -9,6 +9,6 @@ const router = express.Router();
 
 router.get("/", procurarCompra);
 router.post("/", criarCompra);
-router.put("/:id", cancelarCompra);
+router.put("/:id/cancelar", cancelarCompra);
 
 export default router;

@@ -1,23 +1,31 @@
 import express from "express";
 import mongoose from "mongoose";
-import rotas from "./routes/rotas.js";
+import dotenv from "dotenv";
+import cors from "cors";
 
+dotenv.config();
+
+import rotasCompras from "./routes/rotas.js";
+import rotasProdutos from "./routes/rotas_produto.js";
+import rotasUsuario from "./routes/rotas_usuario.js"
 
 const app = express();
 
+//permite receber arquivos json no corpo das requisições
 app.use(express.json());
 
-// 👇 CONEXÃO COM O BANCO
-mongoose.connect("mongodb://127.0.0.1:27017/vitrine")
-  .then(() => console.log("MongoDB conectado"))
-  .catch((err) => console.log("Erro ao conectar:", err));
+//conecta ao backend
+app.use(cors());
 
-//app.use(cors());
-app.use("/rotas",rotas);
+//conecta ao banco
+mongoose.connect(process.env.MONGODB_URI,)
+  .then(() => console.log("Mongo conectado!"))
+  .catch((Err)=> console.log("Falha ao Conectar ao MongoDB!", Err));
 
-//app.get("/",(req, res) =>{
-//    res.send("Api rodando")
-//})
-app.listen(3000, () =>{
-    console.log("Servidor rodando na porta 3000")
-})
+//usa a rota para fazer requisições  
+app.use("/api/compras", rotasCompras);
+app.use("/api/produtos", rotasProdutos);
+app.use("/api/usuario", rotasUsuario); 
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT,()=>{console.log(`Servidor rodando na porta ${PORT}`)})
