@@ -1,22 +1,27 @@
 import Usuario from "../model/model_usuario.js";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 export async function cadastrarUsuario(req, res) {
     try{
+        console.log("Body recebido:", req.body); 
         const {nome, senha, email} = req.body;
         const usuarioExistente = await Usuario.findOne({email});
+        console.log("Usuário existente:", usuarioExistente);
         if(usuarioExistente){
             return res.status(400).json({message:'Usuário já existente'})
         }
+        console.log("Criptografando senha...");
         const senhaSegura = await bcrypt.hash(senha, 10)
-        
+        console.log("Senha criptografada", senhaSegura);
         const usuario =  await Usuario.create({
             nome, email, senha: senhaSegura
         });
-        res.status(201).json(usuario);
+        console.log("Usuário criado:", usuario); 
+        res.status(201).json({message:"Usuario cadastrado com sucesso"});
     }catch(error){
         res.status(500).json({message:'Não foi possível efetual o cadastro! tente novamente outra hora!', erro: error.message});
+        console.log("Erro",error);
     }
 }
 

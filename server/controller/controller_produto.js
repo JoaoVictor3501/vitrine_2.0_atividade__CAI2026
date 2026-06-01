@@ -5,20 +5,20 @@ export async function listarProdutos (req, res) {
         const produto = await Produto.find();
         res.status(200).json(produto)  
     }catch(error){
-        res.status(500).json({message:'Falha ao listar os seus produtos!', erro:message.error})
+        res.status(500).json({message:'Falha ao listar os seus produtos!', erro:error.message})
     }
     
 }
 
 export async function buscarProduto(req, res) {
     try{
-        const produto = await Produto.findById(req.param.id);
+        const produto = await Produto.findById(req.params.id);
         if(!produto){
-            res.status(404).json({message:'Nenhum produto foi encontrado!'});
+            return res.status(404).json({message:'Nenhum produto foi encontrado!'});
         }
-        res.stauts(201).json(produto);
+        res.status(200).json(produto);
     }catch(error){
-        res.status(500).json({message:'Falha ao tentar buscar o seu produto!', erro: message.error})
+        res.status(500).json({message:'Falha ao tentar buscar o seu produto!', erro: error.message})
     }
     
 }
@@ -37,7 +37,7 @@ export async function atualizarProduto(req, res) {
     try{
         const produto = await Produto.findByIdAndUpdate(req.params.id, req.body, {new: true});
         if(!produto){
-            res.status(404).json({message:"Nenhum produto foi encontrado para atualizar"});
+            return res.status(404).json({message:"Nenhum produto foi encontrado para atualizar"});
         }
         res.status(201).json(produto);
     }catch(error){
@@ -50,7 +50,7 @@ export async function deletarProduto(req, res) {
     try{
         const produto = await Produto.findByIdAndDelete(req.params.id);
         if (!produto){
-            res.status(404).json({message:'Nenhum produto foi encontrado para deletar!'})
+            return res.status(404).json({message:'Nenhum produto foi encontrado para deletar!'})
         }
         res.status(200).json(produto);
     }catch(error){ res.status(500).json({message:"Falha ao tentar deletar o produto!", erro: error.message})}

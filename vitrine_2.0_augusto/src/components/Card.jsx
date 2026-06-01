@@ -1,4 +1,4 @@
-export default function Card({ nome, imagem }) {
+export default function Card({ nome, imagem, preco }) {
   return (
     <div style={{
       width: "300px",
@@ -15,6 +15,7 @@ export default function Card({ nome, imagem }) {
         style={{ width: "100%", borderRadius: "10px" }}
       />
       <h3>{nome}</h3>
+      <p>R${preco}</p>
     </div>
   );
 }
